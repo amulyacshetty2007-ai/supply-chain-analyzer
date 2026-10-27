@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: sca-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-sca}
+      MYSQL_USER: ${MYSQL_USER:-sca}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-scapass}
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "3307:3306"        # Beekeeper Studio -> 127.0.0.1:3307
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: sca-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-sca}:${MYSQL_PASSWORD:-scapass}@db:3306/${MYSQL_DATABASE:-sca}?charset=utf8mb4
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+volumes:
+  dbdata:

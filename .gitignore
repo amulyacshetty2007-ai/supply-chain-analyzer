@@ -1,0 +1,10 @@
+(
+echo .env
+echo __pycache__/
+echo *.py[cod]
+echo .pytest_cache/
+echo .venv/
+echo venv/
+echo *.db
+echo *.sqlite3
+) > .gitignore
