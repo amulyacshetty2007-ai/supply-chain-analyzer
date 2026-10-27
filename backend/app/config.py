@@ -7,4 +7,4 @@ AUDITOR_INVITE_CODE = os.getenv("AUDITOR_INVITE_CODE", "")
 OSV_MODE = os.getenv("OSV_MODE", "auto")          # auto | online | offline
 MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", str(2 * 1024 * 1024)))
 MAX_COMPONENTS = int(os.getenv("MAX_COMPONENTS", "5000"))
-SCANS_PER_MINUTE = int(os.getenv("SCANS_PER_MINUTE", "6"))
+SCANS_PER_MINUTE = int(os.getenv("SCANS_PER_MINUTE", "6")) 
